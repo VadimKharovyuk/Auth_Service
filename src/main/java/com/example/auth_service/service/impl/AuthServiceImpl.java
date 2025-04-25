@@ -1,4 +1,4 @@
-package com.example.auth_service.service;
+package com.example.auth_service.service.impl;
 
 import com.example.auth_service.dto.AuthRequest;
 import com.example.auth_service.dto.AuthResponse;
@@ -7,10 +7,13 @@ import com.example.auth_service.dto.UserDto;
 
 import com.example.auth_service.exception.UserAlreadyExistsException;
 import com.example.auth_service.maper.UserMapper;
+import com.example.auth_service.model.User;
 import com.example.auth_service.repository.UserRepository;
 import com.example.auth_service.security.JwtTokenProvider;
-import com.shop.authservice.model.User;
+import com.example.auth_service.service.AuthService;
 
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,23 +23,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtTokenProvider tokenProvider;
-
-    @Autowired
-    private UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
+    private  final  UserRepository userRepository;
+    private  final  PasswordEncoder passwordEncoder;
+    private  final  JwtTokenProvider tokenProvider;
+    private final  UserMapper userMapper;
 
 
     @Override
@@ -62,7 +57,6 @@ public class AuthServiceImpl implements AuthService {
             throw new UserAlreadyExistsException("Email is already in use!");
         }
 
-        // Создаем нового пользователя с помощью маппера
         User user = userMapper.toUser(registerRequest, passwordEncoder);
         User savedUser = userRepository.save(user);
 

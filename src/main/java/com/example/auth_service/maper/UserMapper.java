@@ -65,7 +65,6 @@ public class UserMapper {
         roleRepository.findByName(Role.ERole.ROLE_USER)
                 .ifPresent(roles::add);
 
-        // Если в запросе указана роль ADMIN, добавляем её из базы данных
         if (registerRequest.getRoles() != null && registerRequest.getRoles().contains("ADMIN")) {
             roleRepository.findByName(Role.ERole.ROLE_ADMIN)
                     .ifPresent(roles::add);
